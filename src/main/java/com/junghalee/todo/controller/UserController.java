@@ -3,6 +3,7 @@ package com.junghalee.todo.controller;
 import com.junghalee.todo.dto.ResponseDTO;
 import com.junghalee.todo.dto.UserDTO;
 import com.junghalee.todo.model.UserEntity;
+import com.junghalee.todo.security.TokenProvider;
 import com.junghalee.todo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
@@ -34,6 +38,7 @@ public class UserController {
             UserDTO responseUserDTO = UserDTO.builder()
                     .email(registeredUser.getEmail())
                     .id(registeredUser.getId())
+                    .username(registeredUser.getUsername())
                     .build();
 
             return ResponseEntity.ok().body(responseUserDTO);
@@ -52,9 +57,11 @@ public class UserController {
                 userDTO.getPassword());
 
         if (user != null) {
+            final String token = tokenProvider.create(user);
             final UserDTO responseUserDTO = UserDTO.builder()
                     .email(user.getEmail())
                     .id(user.getId())
+                    .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
         } else {
