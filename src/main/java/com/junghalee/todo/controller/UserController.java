@@ -36,8 +36,8 @@ public class UserController {
             // Save user using service
             UserEntity registeredUser = userService.create(user);
             UserDTO responseUserDTO = UserDTO.builder()
-                    .email(registeredUser.getEmail())
                     .id(registeredUser.getId())
+                    .email(registeredUser.getEmail())
                     .username(registeredUser.getUsername())
                     .build();
 
@@ -59,8 +59,9 @@ public class UserController {
         if (user != null) {
             final String token = tokenProvider.create(user);
             final UserDTO responseUserDTO = UserDTO.builder()
-                    .email(user.getEmail())
                     .id(user.getId())
+                    .email(user.getEmail())
+                    .username(user.getUsername())
                     .token(token)
                     .build();
             return ResponseEntity.ok().body(responseUserDTO);
