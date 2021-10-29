@@ -67,3 +67,9 @@ Temporary Items
 
 # Properties
 env.properties
+# bash files
+*.sh
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
